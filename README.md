@@ -7,3 +7,5 @@ Distance calculator between 2 points (or addresses).
 
 ## Run
 Directly from XCode or `react-native run-ios`
+
+<img src="https://raw.githubusercontent.com/34x/distance-calc/master/screen.png" />
