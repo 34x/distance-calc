@@ -6,11 +6,12 @@
     "start": "node node_modules/react-native/local-cli/cli.js start --reset-cache"
   },
   "dependencies": {
-    "react": "16.0.0-alpha.6",
-    "react-native": "0.43.4",
-    "react-native-maps": "^0.15.0"
+    "react": "16.6.0-alpha.8af6728",
+    "react-native": "0.57.3",
+    "react-native-maps": "0.22.0"
   },
   "devDependencies": {
-    "babel-preset-react-native": "1.9.2"
+    "babel-jest": "23.6.0",
+    "metro-react-native-babel-preset": "0.48.1"
   }
 }
