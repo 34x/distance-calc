@@ -302,7 +302,8 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 52,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    width: '90%',
   },
   labelContaner : {
     flexDirection: 'row',
