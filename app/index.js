@@ -1,9 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from 'react';
 import {
   AppRegistry,
@@ -12,11 +6,12 @@ import {
   View,
   TextInput,
   TouchableHighlight,
-  Dimensions,
 } from 'react-native';
 import MapView from 'react-native-maps';
 import Geo from './Geo';
-import Routes from './Routes';
+import RoutesView from './components/RoutesView';
+import AddressInput from './components/AddressInput'
+import MapElement from './components/MapElement'
 
 const geo = new Geo();
 
@@ -58,7 +53,6 @@ export default class DistanceCalculator extends Component {
 
   load(incr) {
       this.setState({loaderCount: this.state.loaderCount + incr});
-      //console.log('LOADER: ', this.state.loaderCount);
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -212,82 +206,70 @@ export default class DistanceCalculator extends Component {
       sourceAddress, destinationAddress,
       sourceLocations, destinationLocations,
     } = this.state;
-    console.log(address);
-    if (0 === sourceLocations.length || destinationLocations.length > 0) {
+
+    if (0 === sourceLocations.length) {
       this.setState({
         sourceAddress: address,
         sourceLocations: [
           {location: event.nativeEvent.coordinate}
         ]
       })
-    } else {
+    } else if (0 === destinationLocations.length) {
       this.setState({
         destinationAddress: address,
         destinationLocations: [
           {location: event.nativeEvent.coordinate}
         ]
       })
+    } else {
+      this.setState({
+        sourceAddress: address,
+        destinationAddress: '',
+        sourceLocations: [
+          {location: event.nativeEvent.coordinate}
+        ],
+        destinationLocations: [
+        ]
+      })
     }
   }
 
   render() {
-    const screenSize = Dimensions.get('window');
-    const sourceStyle = 1 === this.state.sourceLocations.length ? styles.locationCorrect : null;
-    const destStyle = 1 === this.state.destinationLocations.length ? styles.locationCorrect : null;
-
     return (
       <View style={styles.container}>
-        <MapView
-          style={{ width: screenSize.width, height: screenSize.height, position: 'absolute' }}
-          onPress={this.onMapPress.bind(this)}
-        >
-          {
-            this.state.sourceLocations.map((location) => {
-              return <MapView.Marker
-                key={location.location}
-                pinColor="blue"
-                coordinate={location.location}
-              />
-            })
-          }
-          {
-            this.state.destinationLocations.map((location) => {
-              return <MapView.Marker
-                key={location.location}
-                pinColor="green"
-                coordinate={location.location}
-              />
-            })
-          }
-        </MapView>
-        <View style={styles.labelContaner}>
-          <Text style={styles.label}>Source</Text>
-        </View>
-        <TextInput
-          placeholder="Home address"
-          style={[styles.input, sourceStyle]}
-          onChangeText={(sourceAddress) => this.setState({sourceAddress})}
-          value={this.state.sourceAddress}
+        <MapElement
+          onMapPress={this.onMapPress.bind(this)}
+          sourceLocations={this.state.sourceLocations}
+          destinationLocations={this.state.destinationLocations}
         />
-        {
-          // this.locationInfo(this.state.sourceLocations, POINT_TYPE.SOURCE)
-          // for the future to handle different locations for one address
-        }
-        <View style={styles.labelContaner}>
-          <Text style={styles.label}>Destination</Text>
+
+        <View style={styles.controlsContainer}>
+          <AddressInput
+            label='Source'
+            placeholder='Home address'
+            onChange={(sourceAddress) => this.setState({sourceAddress})}
+            value={this.state.sourceAddress}
+            isHiglighted={ 1 === this.state.sourceLocations.length }
+          />
+          <AddressInput
+            label='Destination'
+            placeholder='Work address'
+            onChange={(destinationAddress) => this.setState({destinationAddress})}
+            value={this.state.destinationAddress}
+            isHiglighted={ 1 === this.state.destinationLocations.length }
+          />
+          {
+            // this.locationInfo(this.state.sourceLocations, POINT_TYPE.SOURCE)
+            // for the future to handle different locations for one address
+          }
+
+          { this.state.loaderCount > 0 &&
+            <Text style={styles.loader}>Loading</Text>
+          }
+
+          <RoutesView items={this.state.routes} />
+
         </View>
-        <TextInput
-          placeholder="Work address"
-          style={[styles.input, destStyle]}
-          onChangeText={(destinationAddress) => this.setState({destinationAddress})}
-          value={this.state.destinationAddress}
-        />
-        { this.state.loaderCount > 0 &&
-          <Text style={styles.loader}>Loading</Text>
-        }
-
-        <Routes items={this.state.routes} />
-
       </View>
     );
   }
@@ -300,21 +282,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#E6F5FF',
   },
-  input: {
-    height: 52,
-    backgroundColor: 'white',
+  controlsContainer: {
+    paddingTop: 50,
     width: '90%',
-  },
-  labelContaner : {
-    flexDirection: 'row',
-  },
-  label: {
-    flex: 1,
-    fontSize: 16,
-    padding: 4,
-  },
-  locationCorrect: {
-    backgroundColor: '#64C65E',
   },
   locationItem: {
     height: 52,
