@@ -74,18 +74,6 @@ export default class DistanceCalculator extends Component {
     }
   }
 
-  prettyLocation(location) {
-    const address = location.address;
-    const keys = ['street', 'postalCode', 'area', 'country']
-    let pretty = [];
-    keys.forEach((key) => {
-      if (address[key]) {
-        pretty.push(address[key]);
-      }
-    });
-    return pretty.join(', ');
-  }
-
   getLocations(address, type) {
     clearTimeout(this.state.checkTimers[type]);
     if (0 === address.search(/^[\d\., ]+$/)) {
@@ -147,7 +135,7 @@ export default class DistanceCalculator extends Component {
     this.load(1);
     geo.requestRoutes([source, destination]).then((routes, allErrors) => {
       console.log('Found routes: ', routes);
-      this.processRoutes(routes);
+      this.props.setRoutes(routes);
       this.load(-1)
     }).catch((error) => {
       this.load(-1)
@@ -155,59 +143,11 @@ export default class DistanceCalculator extends Component {
     })
   }
 
-  processRoutes(routes) {
-    const dist = {};
-    for (const idx in routes) {
-      const route = routes[idx];
-      if (undefined === dist[route.type]) {
-        dist[route.type] = {
-          time: [],
-          distance: [],
-        }
-      }
-
-      dist[route.type].time.push(route.time);
-      dist[route.type].distance.push(route.distance);
-    }
-
-    const routesInfo = [];
-    for (const key in dist) {
-      routesInfo.push(
-        {
-          type: key,
-          distanceMin: (Math.min.apply(Math, dist[key].distance) / 1000.0).toFixed(2),
-          distanceMax: (Math.max.apply(Math, dist[key].distance) / 1000.0).toFixed(2),
-          timeMin: (Math.max.apply(Math, dist[key].time) / 3600.0).toFixed(2),
-          timeMax: (Math.max.apply(Math, dist[key].time) / 3600.0).toFixed(2),
-        }
-      );
-    }
-
-    this.setState({ routes: routesInfo })
-  }
-
-  locationInfo(locations, type) {
-
-    return (locations.length > 0 &&
-      locations.map((el, idx) => {
-      return (
-          <TouchableHighlight key="{type}-{idx}">
-            <Text style={styles.locationItem}>{this.prettyLocation(el)}</Text>
-          </TouchableHighlight>
-        );
-      })
-    );
-  }
-
-  onMapPress(event) {
-    this.props.selectMapPoint(event.nativeEvent.coordinate);
-  }
-
   render() {
     return (
       <View style={styles.container}>
         <MapElement
-          onMapPress={this.onMapPress.bind(this)}
+          onMapPress={event => this.props.selectMapPoint(event.nativeEvent.coordinate)}
           sourceLocations={this.props.sourceLocations}
           destinationLocations={this.props.destinationLocations}
         />
@@ -227,16 +167,12 @@ export default class DistanceCalculator extends Component {
             value={this.props.destination}
             isHiglighted={ 1 === this.state.destinationLocations.length }
           />
-          {
-            // this.locationInfo(this.state.sourceLocations, POINT_TYPE.SOURCE)
-            // for the future to handle different locations for one address
-          }
 
           { this.state.loaderCount > 0 &&
             <Text style={styles.loader}>Loading</Text>
           }
 
-          <RoutesView items={this.state.routes} />
+          <RoutesView items={this.props.routes} />
 
         </View>
       </View>

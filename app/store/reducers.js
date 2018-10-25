@@ -7,10 +7,6 @@ import {
     SELECT_MAP_POINT,
 } from './actions';
 
-const initialState = {
-
-};
-
 function search(state, action) {
     if ('undefined' === typeof state) {
         return {
@@ -18,6 +14,7 @@ function search(state, action) {
             destination: '',
             sourceLocations: [],
             destinationLocations: [],
+            routes: [],
         }
     }
 
@@ -60,6 +57,37 @@ function search(state, action) {
                     }
                 );
             }
+        case SET_ROUTES:
+            const routes = action.payload;
+            const dist = {};
+            for (const idx in routes) {
+                const route = routes[idx];
+                if (undefined === dist[route.type]) {
+                    dist[route.type] = {
+                        time: [],
+                        distance: [],
+                    }
+                }
+
+                dist[route.type].time.push(route.time);
+                dist[route.type].distance.push(route.distance);
+            }
+
+            const routesInfo = [];
+            for (const key in dist) {
+                routesInfo.push(
+                    {
+                        type: key,
+                        distanceMin: (Math.min.apply(Math, dist[key].distance) / 1000.0).toFixed(2),
+                        distanceMax: (Math.max.apply(Math, dist[key].distance) / 1000.0).toFixed(2),
+                        timeMin: (Math.max.apply(Math, dist[key].time) / 3600.0).toFixed(2),
+                        timeMax: (Math.max.apply(Math, dist[key].time) / 3600.0).toFixed(2),
+                    }
+                );
+            }
+
+            return Object.assign({}, state, { routes: routesInfo });
+
         default:
             return state;
     }
