@@ -8,12 +8,9 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import MapView from 'react-native-maps';
-import Geo from './Geo';
 import RoutesView from './components/RoutesView';
 import AddressInput from './components/AddressInput'
 import MapElement from './components/MapElement'
-
-const geo = new Geo();
 
 const POINT_TYPE = {
   SOURCE: 'source',
@@ -61,67 +58,10 @@ export default class DistanceCalculator extends Component {
       sourceLocations, destinationLocations
     } = nextState;
 
-    if (this.state.sourceAddress !== sourceAddress) {
-      this.getLocations(sourceAddress, POINT_TYPE.SOURCE);
-    }
-    if (this.state.destinationAddress !== destinationAddress) {
-      this.getLocations(destinationAddress, POINT_TYPE.destination);
-    }
-
     if (sourceLocations !== this.state.sourceLocations
       || destinationLocations !== this.state.destinationLocations) {
       this.calculateDistance(sourceLocations, destinationLocations);
     }
-  }
-
-  getLocations(address, type) {
-    clearTimeout(this.state.checkTimers[type]);
-    if (0 === address.search(/^[\d\., ]+$/)) {
-      // Assume we entered coordinates,
-      // but since we don't handle it yet properly (reverse geocoding) skip update
-      return;
-    }
-    if (address.length < this.state.minAddressLength) {
-      if (POINT_TYPE.SOURCE === type) {
-        this.setState({ sourceLocations: [] });
-      } else {
-        this.setState({ destinationLocations: [] });
-      }
-      return;
-    }
-
-    const timerID = setTimeout(() => {
-      this.setState({
-        routes: [],
-      });
-
-      this.load(1);
-
-      geo.geocodeAddress(address)
-        .then((locations) => {
-          console.log('Got locations: ', locations);
-          if (POINT_TYPE.SOURCE === type) {
-            this.setState({ sourceLocations: locations });
-          } else {
-            this.setState({ destinationLocations: locations });
-          }
-          this.load(-1)
-        })
-        .catch((error) => {
-          this.load(-1)
-          console.log('Geocode error: ', error);
-          if (POINT_TYPE.SOURCE === type) {
-            this.setState({ sourceLocations: [] });
-          } else {
-            this.setState({ destinationLocations: [] });
-          }
-        });
-    }, 700);
-
-    const newTimerState = {};
-    newTimerState[type] = timerID;
-    const newTimers = Object.assign({}, this.state.checkTimers, newTimerState);
-    this.setState({ checkTimers: newTimers});
   }
 
   calculateDistance(sourceLocations, destinationLocations) {
@@ -158,14 +98,14 @@ export default class DistanceCalculator extends Component {
             placeholder='Home address'
             onChange={(sourceAddress) => this.props.setSource(sourceAddress)}
             value={this.props.source}
-            isHiglighted={ 1 === this.state.sourceLocations.length }
+            isHiglighted={ 1 === this.props.sourceLocations.length }
           />
           <AddressInput
             label='Destination'
             placeholder='Work address'
             onChange={(destinationAddress) => this.props.setDestination(destinationAddress)}
             value={this.props.destination}
-            isHiglighted={ 1 === this.state.destinationLocations.length }
+            isHiglighted={ 1 === this.props.destinationLocations.length }
           />
 
           { this.state.loaderCount > 0 &&

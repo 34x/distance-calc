@@ -5,6 +5,7 @@ import {
     SET_SOURCE_LOCATIONS,
     SET_DESTINATION_LOCATIONS,
     SELECT_MAP_POINT,
+    SET_ROUTES,
 } from './actions';
 
 function search(state, action) {
@@ -23,6 +24,10 @@ function search(state, action) {
             return Object.assign({}, state, { source: action.payload });
         case SET_DESTINATION:
             return Object.assign({}, state, { destination: action.payload });
+        case SET_SOURCE_LOCATIONS:
+            return Object.assign({}, state, { sourceLocations: action.payload });
+        case SET_DESTINATION_LOCATIONS:
+            return Object.assign({}, state, { destinationLocations: action.payload });
         case SELECT_MAP_POINT:
             const address = `${action.payload.latitude}, ${action.payload.longitude}`;
             const {
