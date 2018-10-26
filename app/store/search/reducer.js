@@ -1,36 +1,18 @@
-import { combineReducers } from 'redux';
 import {
-    SHOW_ERROR,
-    HANDLE_ERROR,
     CLEAR_ERROR,
-    SET_SOURCE,
-    SET_DESTINATION,
-    INPUT_SOURCE,
+    HANDLE_ERROR,
     INPUT_DESTINATION,
-    SET_SOURCE_LOCATIONS,
-    SET_DESTINATION_LOCATIONS,
+    INPUT_SOURCE,
     SELECT_MAP_POINT,
+    SET_DESTINATION,
+    SET_DESTINATION_LOCATIONS,
     SET_ROUTES,
+    SET_SOURCE,
+    SET_SOURCE_LOCATIONS,
+    SHOW_ERROR,
 } from './actions';
 
-function error(state, action) {
-    if ('undefined' === typeof state) {
-        return {
-            error: '',
-        }
-    }
-
-    switch (action.type) {
-        case SHOW_ERROR:
-            return { error: action.payload.type + ': ' + action.payload.error }
-        case CLEAR_ERROR:
-            return { error: '' }
-        default:
-            return state;
-    }
-}
-
-function search(state, action) {
+export default function search(state, action) {
     if ('undefined' === typeof state) {
         return {
             source: '',
@@ -102,43 +84,3 @@ function search(state, action) {
             return state;
     }
 }
-
-const selectorSearch = state => state.search;
-
-export const selectors = {
-    search: {
-        root: selectorSearch,
-        sourceLocations: state => selectors.search.root(state).sourceLocations,
-        destinationLocations: state => selectors.search.root(state).destinationLocations,
-        firstSourceLocation: state => {
-            const sources = selectors.search.sourceLocations(state);
-            if (sources.length > 0) {
-                return sources[0];
-            }
-
-            return undefined;
-        },
-        firstDestinationLocation: state => {
-            const destinations = selectors.search.destinationLocations(state);
-            if (destinations.length > 0) {
-                return destinations[0];
-            }
-
-            return undefined;
-        }
-    },
-    error: {
-        errorsList: state => {
-            const error = state.error.error;
-            if ('' === error) {
-                return [];
-            }
-            return [ error ];
-        },
-    }
-}
-
-export default combineReducers({
-    search,
-    error,
-});

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import ErrorView from './ErrorView';
-import { selectors } from '../store/reducers';
+import { selectors } from '../store/reducer';
 
 export default connect(
     state => {

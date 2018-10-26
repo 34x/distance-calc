@@ -1,36 +1,13 @@
-/*
- * action types
- */
 export const SET_SOURCE = 'SET_SOURCE';
 export const SET_DESTINATION = 'SET_DESTINATION';
 export const INPUT_SOURCE = 'INPUT_SOURCE';
 export const INPUT_DESTINATION = 'INPUT_DESTINATION';
-export const SET_SOURCE_LOCATIONS = 'SET_SOURCE_LOCATIONS';
-export const SET_DESTINATION_LOCATIONS = 'SET_DESTINATION_LOCATIONS';
-export const SELECT_MAP_POINT = 'SELECT_MAP_POINT';
-export const SET_ROUTES = 'SET_ROUTES';
-export const LOOKUP_SOURCE = 'LOOKUP_SOURCE';
 export const LOOKUP_DESTINATION = 'LOOKUP_DESTINATION';
-
-export const HANDLE_ERROR = 'HANDLE_ERROR';
-export const SHOW_ERROR = 'SHOW_ERROR';
-export const CLEAR_ERROR = 'CLEAR_ERROR';
-
-/*
- * action creators
- */
-
-export function handleError(payload) {
-  return { type: HANDLE_ERROR, payload: payload };
-}
-
-export function showError(text) {
-  return { type: SHOW_ERROR, payload: text };
-}
-
-export function clearError() {
-  return { type: CLEAR_ERROR };
-}
+export const LOOKUP_SOURCE = 'LOOKUP_SOURCE';
+export const SELECT_MAP_POINT = 'SELECT_MAP_POINT';
+export const SET_DESTINATION_LOCATIONS = 'SET_DESTINATION_LOCATIONS';
+export const SET_ROUTES = 'SET_ROUTES';
+export const SET_SOURCE_LOCATIONS = 'SET_SOURCE_LOCATIONS';
 
 export function setSource(text) {
   return { type: SET_SOURCE, payload: text };

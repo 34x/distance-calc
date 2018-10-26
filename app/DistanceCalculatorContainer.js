@@ -5,7 +5,7 @@ import {
     inputDestination,
     selectMapPoint,
     setRoutes,
-} from './store/actions';
+} from './store/search/actions';
 
 export default connect(
   state => {
