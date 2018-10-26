@@ -2,6 +2,8 @@ import { combineReducers } from 'redux';
 import {
     SET_SOURCE,
     SET_DESTINATION,
+    INPUT_SOURCE,
+    INPUT_DESTINATION,
     SET_SOURCE_LOCATIONS,
     SET_DESTINATION_LOCATIONS,
     SELECT_MAP_POINT,
@@ -15,53 +17,36 @@ function search(state, action) {
             destination: '',
             sourceLocations: [],
             destinationLocations: [],
-            routes: [],
+            routes: [
+                // {
+                //   type: 'walk',
+                //   distanceMin: 8,
+                //   distanceMax: 12,
+                //   timeMin: 12,
+                //   timeMax: 18,
+                // },
+                // {
+                //   type: 'auto',
+                //   distanceMin: 8,
+                //   distanceMax: 16,
+                //   timeMin: 12,
+                //   timeMax: 18,
+                // }
+            ],
         }
     }
 
     switch (action.type) {
         case SET_SOURCE:
+        case INPUT_SOURCE:
             return Object.assign({}, state, { source: action.payload });
         case SET_DESTINATION:
+        case INPUT_DESTINATION:
             return Object.assign({}, state, { destination: action.payload });
         case SET_SOURCE_LOCATIONS:
             return Object.assign({}, state, { sourceLocations: action.payload });
         case SET_DESTINATION_LOCATIONS:
             return Object.assign({}, state, { destinationLocations: action.payload });
-        case SELECT_MAP_POINT:
-            const address = `${action.payload.latitude}, ${action.payload.longitude}`;
-            const {
-              source, destination,
-              sourceLocations, destinationLocations,
-            } = state;
-
-            if (0 === sourceLocations.length) {
-                return Object.assign({},
-                    state,
-                    {
-                        source: address,
-                        sourceLocations: [ { location: action.payload } ]
-                    }
-                );
-            } else if (0 === destinationLocations.length) {
-                return Object.assign({},
-                    state,
-                    {
-                        destination: address,
-                        destinationLocations: [ { location: action.payload } ]
-                    }
-                );
-            } else {
-                return Object.assign({},
-                    state,
-                    {
-                        source: address,
-                        destinationAddress: '',
-                        sourceLocations: [ { location: action.payload } ],
-                        destinationLocations: [],
-                    }
-                );
-            }
         case SET_ROUTES:
             const routes = action.payload;
             const dist = {};
@@ -95,6 +80,32 @@ function search(state, action) {
 
         default:
             return state;
+    }
+}
+
+const selectorSearch = state => state.search;
+
+export const selectors = {
+    search: {
+        root: selectorSearch,
+        sourceLocations: state => selectors.search.root(state).sourceLocations,
+        destinationLocations: state => selectors.search.root(state).destinationLocations,
+        firstSourceLocation: state => {
+            const sources = selectors.search.sourceLocations(state);
+            if (sources.length > 0) {
+                return sources[0];
+            }
+
+            return undefined;
+        },
+        firstDestinationLocation: state => {
+            const destinations = selectors.search.destinationLocations(state);
+            if (destinations.length > 0) {
+                return destinations[0];
+            }
+
+            return undefined;
+        }
     }
 }
 

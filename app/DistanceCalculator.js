@@ -18,71 +18,6 @@ const POINT_TYPE = {
 }
 
 export default class DistanceCalculator extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      sourceAddress: '',
-      destinationAddress: '',
-      checkTimers: {},
-      sourceLocations: [],
-      destinationLocations: [],
-      minAddressLength: 4,
-      routes: [
-        // {
-        //   type: 'walk',
-        //   distanceMin: 8,
-        //   distanceMax: 12,
-        //   timeMin: 12,
-        //   timeMax: 18,
-        // },
-        // {
-        //   type: 'auto',
-        //   distanceMin: 8,
-        //   distanceMax: 16,
-        //   timeMin: 12,
-        //   timeMax: 18,
-        // }
-      ],
-      loaderCount: 0,
-    };
-  }
-
-  load(incr) {
-      this.setState({loaderCount: this.state.loaderCount + incr});
-  }
-
-  componentWillUpdate(nextProps, nextState) {
-    const {
-      sourceAddress, destinationAddress,
-      sourceLocations, destinationLocations
-    } = nextState;
-
-    if (sourceLocations !== this.state.sourceLocations
-      || destinationLocations !== this.state.destinationLocations) {
-      this.calculateDistance(sourceLocations, destinationLocations);
-    }
-  }
-
-  calculateDistance(sourceLocations, destinationLocations) {
-    if (0 === sourceLocations.length || 0 === destinationLocations.length) {
-      return;
-    }
-    // this.setState({ sourceLocations: [], destinationLocations: [] });
-    const source = sourceLocations[0];
-    const destination = destinationLocations[0];
-
-    this.load(1);
-    geo.requestRoutes([source, destination]).then((routes, allErrors) => {
-      console.log('Found routes: ', routes);
-      this.props.setRoutes(routes);
-      this.load(-1)
-    }).catch((error) => {
-      this.load(-1)
-      console.log('Routes request error: ', error);
-    })
-  }
-
   render() {
     return (
       <View style={styles.container}>
@@ -107,10 +42,6 @@ export default class DistanceCalculator extends Component {
             value={this.props.destination}
             isHiglighted={ 1 === this.props.destinationLocations.length }
           />
-
-          { this.state.loaderCount > 0 &&
-            <Text style={styles.loader}>Loading</Text>
-          }
 
           <RoutesView items={this.props.routes} />
 

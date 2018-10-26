@@ -3,6 +3,8 @@
  */
 export const SET_SOURCE = 'SET_SOURCE';
 export const SET_DESTINATION = 'SET_DESTINATION';
+export const INPUT_SOURCE = 'INPUT_SOURCE';
+export const INPUT_DESTINATION = 'INPUT_DESTINATION';
 export const SET_SOURCE_LOCATIONS = 'SET_SOURCE_LOCATIONS';
 export const SET_DESTINATION_LOCATIONS = 'SET_DESTINATION_LOCATIONS';
 export const SELECT_MAP_POINT = 'SELECT_MAP_POINT';
@@ -20,6 +22,14 @@ export function setSource(text) {
 
 export function setDestination(text) {
   return { type: SET_DESTINATION, payload: text };
+}
+
+export function inputSource(text) {
+  return { type: INPUT_SOURCE, payload: text };
+}
+
+export function inputDestination(text) {
+  return { type: INPUT_DESTINATION, payload: text };
 }
 
 export function selectMapPoint(text) {

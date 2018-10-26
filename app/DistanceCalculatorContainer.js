@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 import DistanceCalculator from './DistanceCalculator';
 import {
-    setSource,
-    setDestination,
+    inputSource,
+    inputDestination,
     selectMapPoint,
     setRoutes,
 } from './store/actions';
@@ -13,8 +13,8 @@ export default connect(
   },
   dispatch => {
     return {
-        setSource: text => dispatch(setSource(text)),
-        setDestination: text => dispatch(setDestination(text)),
+        setSource: text => dispatch(inputSource(text)),
+        setDestination: text => dispatch(inputDestination(text)),
         selectMapPoint: coordinate => dispatch(selectMapPoint(coordinate)),
         setRoutes: routes => dispatch(setRoutes(routes)),
     }
