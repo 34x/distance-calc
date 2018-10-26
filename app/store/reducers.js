@@ -1,5 +1,8 @@
 import { combineReducers } from 'redux';
 import {
+    SHOW_ERROR,
+    HANDLE_ERROR,
+    CLEAR_ERROR,
     SET_SOURCE,
     SET_DESTINATION,
     INPUT_SOURCE,
@@ -9,6 +12,23 @@ import {
     SELECT_MAP_POINT,
     SET_ROUTES,
 } from './actions';
+
+function error(state, action) {
+    if ('undefined' === typeof state) {
+        return {
+            error: '',
+        }
+    }
+
+    switch (action.type) {
+        case SHOW_ERROR:
+            return { error: action.payload.type + ': ' + action.payload.error }
+        case CLEAR_ERROR:
+            return { error: '' }
+        default:
+            return state;
+    }
+}
 
 function search(state, action) {
     if ('undefined' === typeof state) {
@@ -106,9 +126,19 @@ export const selectors = {
 
             return undefined;
         }
+    },
+    error: {
+        errorsList: state => {
+            const error = state.error.error;
+            if ('' === error) {
+                return [];
+            }
+            return [ error ];
+        },
     }
 }
 
 export default combineReducers({
     search,
+    error,
 });

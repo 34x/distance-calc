@@ -9,8 +9,9 @@ import {
 } from 'react-native';
 import MapView from 'react-native-maps';
 import RoutesView from './components/RoutesView';
-import AddressInput from './components/AddressInput'
-import MapElement from './components/MapElement'
+import AddressInput from './components/AddressInput';
+import MapElement from './components/MapElement';
+import ErrorView from './components/ErrorViewContainer';
 
 const POINT_TYPE = {
   SOURCE: 'source',
@@ -28,6 +29,7 @@ export default class DistanceCalculator extends Component {
         />
 
         <View style={styles.controlsContainer}>
+          <ErrorView />
           <AddressInput
             label='Source'
             placeholder='Home address'

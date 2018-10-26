@@ -8,6 +8,7 @@ import {
 import { delay } from 'redux-saga';
 import Geo from '../Geo';
 import {
+    HANDLE_ERROR,
     INPUT_SOURCE,
     INPUT_DESTINATION,
     SET_SOURCE_LOCATIONS,
@@ -18,6 +19,9 @@ import {
     setSourceLocations,
     setDestinationLocations,
     setRoutes,
+    handleError,
+    showError,
+    clearError,
 } from './actions';
 import { selectors } from './reducers';
 
@@ -67,7 +71,10 @@ function* calculateDistance(action) {
         const routes = yield call(requestRoutes, [source, destination]);
         yield put(setRoutes(routes));
     } catch(e) {
-        console.error('Calculate distance error: ' + e)
+        yield put(handleError({
+            type: 'Calculate distance error',
+            error: e
+        }));
     }
 }
 
@@ -91,20 +98,26 @@ function* selectMapPoint(action) {
             yield put(setDestinationLocations([]))
         }
     } catch (e) {
-        console.error('selectMapPointError: ' + e);
+        yield put(handleError({
+            type: 'Select map point error',
+            error: e
+        }));
     }
 }
 
+function* errorHandleSaga(action) {
+    yield put(showError(action.payload));
+    yield delay(5000);
+    yield put(clearError());
+}
 
 function* rootSaga() {
-    try {
-        yield takeLatest(INPUT_SOURCE, fetchSource);
-        yield takeLatest(INPUT_DESTINATION, fetchDestination);
-        yield takeLatest(SELECT_MAP_POINT, selectMapPoint);
-        yield takeLatest([SET_DESTINATION_LOCATIONS, SET_SOURCE_LOCATIONS], calculateDistance);
-    } catch (e) {
-        console.error(e);
-    }
+    yield takeLatest(INPUT_SOURCE, fetchSource);
+    yield takeLatest(INPUT_DESTINATION, fetchDestination);
+    yield takeLatest(SELECT_MAP_POINT, selectMapPoint);
+    yield takeLatest([SET_DESTINATION_LOCATIONS, SET_SOURCE_LOCATIONS], calculateDistance);
+    yield takeLatest([SET_DESTINATION_LOCATIONS, SET_SOURCE_LOCATIONS], calculateDistance);
+    yield takeLatest(HANDLE_ERROR, errorHandleSaga);
 }
 
 export default rootSaga;
