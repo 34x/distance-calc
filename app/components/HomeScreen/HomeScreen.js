@@ -8,10 +8,10 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import MapView from 'react-native-maps';
-import RoutesView from './components/RoutesView';
-import AddressInput from './components/AddressInput';
-import MapElement from './components/MapElement';
-import ErrorView from './components/ErrorViewContainer';
+import RoutesView from '../RoutesView';
+import AddressInput from '../AddressInput';
+import MapElement from '../MapElement';
+import ErrorView from '../ErrorView';
 
 const POINT_TYPE = {
   SOURCE: 'source',

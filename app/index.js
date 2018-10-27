@@ -10,7 +10,7 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga'
 import r from './store';
-import Calculator from './DistanceCalculatorContainer';
+import HomeScreen from './components/HomeScreen';
 
 const sagaMiddleware = createSagaMiddleware()
 
@@ -24,7 +24,7 @@ sagaMiddleware.run(r.saga)
 export default App = () =>  {
   return (
     <Provider store={store}>
-      <Calculator />
+      <HomeScreen />
     </Provider>
   );
 }

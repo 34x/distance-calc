@@ -14,13 +14,17 @@ export default ErrorView = (props) =>  {
     }
 
     return (
-        <View style={styles.errorContainer}>
+        <TouchableHighlight
+          onPress={props.close}
+          style={styles.errorContainer}>
+          <View>
             {
-                props.errors.map(e => {
-                    return (<Text key={e}>{e}</Text>)
+                props.errors.map((e, index) => {
+                    return (<Text key={`error-${index}`}>{e}</Text>)
                 })
             }
-        </View>
+          </View>
+        </TouchableHighlight>
     );
 }
 

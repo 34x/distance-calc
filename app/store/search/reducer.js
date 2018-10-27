@@ -86,8 +86,11 @@ export default function search(state, action) {
 }
 
 export const selectors = {
+    source: state => state.source,
+    destination: state => state.destination,
     sourceLocations: state => state.sourceLocations,
     destinationLocations: state => state.destinationLocations,
+    routes: state => state.routes,
     firstSourceLocation: state => {
         const sources = selectors.sourceLocations(state);
         if (sources.length > 0) {

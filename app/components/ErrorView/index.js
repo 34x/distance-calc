@@ -1,16 +1,16 @@
 import { connect } from 'react-redux';
 import ErrorView from './ErrorView';
-import { selectors } from '../store/reducer';
+import store from '../../store';
 
 export default connect(
     state => {
         return {
-            errors: selectors.error.errorsList(state),
+            errors: store.selectors.error.errorsList(state),
         }
     },
     dispatch => {
         return {
-
+        	close: () => dispatch(store.actions.error.clearError())
         }
     }
 )(ErrorView);
