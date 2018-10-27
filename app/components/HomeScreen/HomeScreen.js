@@ -6,6 +6,7 @@ import {
   View,
   TextInput,
   TouchableHighlight,
+  Dimensions,
 } from 'react-native';
 import MapView from 'react-native-maps';
 import RoutesView from '../RoutesView';
@@ -13,21 +14,18 @@ import AddressInput from '../AddressInput';
 import MapElement from '../MapElement';
 import ErrorView from '../ErrorView';
 
-const POINT_TYPE = {
-  SOURCE: 'source',
-  DESTINATION: 'destination',
-}
+const screenSize = Dimensions.get('window');
 
 export default class DistanceCalculator extends Component {
   render() {
     return (
       <View style={styles.container}>
         <MapElement
-          onMapPress={event => this.props.selectMapPoint(event.nativeEvent.coordinate)}
+          style={{ width: screenSize.width, height: screenSize.height, position: 'absolute' }}
+          onPress={event => this.props.selectMapPoint(event.nativeEvent.coordinate)}
           sourceLocations={this.props.sourceLocations}
           destinationLocations={this.props.destinationLocations}
         />
-
         <View style={styles.controlsContainer}>
           <ErrorView />
           <AddressInput
