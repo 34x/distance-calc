@@ -1,17 +1,17 @@
-import { combineReducers } from 'redux';
+import { combineReducers } from 'redux'
 
-import search, { selectors as searchSelectors } from './search/reducer';
-import error, { selectors as errorSelectors } from './error/reducer';
-import * as errorActions from './error/actions';
-import * as searchActions from './search/actions';
+import search, { selectors as searchSelectors } from './search/reducer'
+import error, { selectors as errorSelectors } from './error/reducer'
+import * as errorActions from './error/actions'
+import * as searchActions from './search/actions'
 
 // to not disclosure root state for child selectors
 const slicedSelectors = (rootSelector, selectors) => {
-    const sliced = {};
+    const sliced = {}
     for (const key of Object.keys(selectors)) {
-        sliced[key] = state => selectors[key](rootSelector(state));
+        sliced[key] = state => selectors[key](rootSelector(state))
     }
-    return sliced;
+    return sliced
 }
 
 export const selectors = {
@@ -27,4 +27,4 @@ export const actions = {
 export default combineReducers({
     search,
     error,
-});
+})

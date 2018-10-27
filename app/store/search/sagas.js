@@ -1,13 +1,12 @@
 import {
     call,
     put,
-    takeEvery,
     takeLatest,
     select,
     all,
-} from 'redux-saga/effects';
-import { delay } from 'redux-saga';
-import Geo from '../../Geo';
+} from 'redux-saga/effects'
+import { delay } from 'redux-saga'
+import Geo from '../../Geo'
 import {
     INPUT_DESTINATION,
     INPUT_SOURCE,
@@ -19,23 +18,23 @@ import {
     setRoutes,
     setSource,
     setSourceLocations,
-} from './actions';
-import { handleError } from '../error/actions';
-import { selectors } from '../reducer';
+} from './actions'
+import { handleError } from '../error/actions'
+import { selectors } from '../reducer'
 
-const geo = new Geo();
+const geo = new Geo()
 
 function fetchLocations(address) {
-    const minAddressLength = 1;
+    const minAddressLength = 1
 
     if (address.length < minAddressLength) {
-        return [];
+        return []
     }
 
-    if (0 === address.search(/^[\d\., ]+$/)) {
-      // Assume we entered coordinates,
-      // but since we don't handle it yet properly (reverse geocoding) skip update
-      return [];
+    if (address.search(/^[\d., ]+$/) === 0) {
+        // Assume we entered coordinates,
+        // but since we don't handle it yet properly (reverse geocoding) skip update
+        return []
     }
 
     return geo.geocodeAddress(address)
@@ -43,64 +42,63 @@ function fetchLocations(address) {
 
 function* fetchSource(action) {
     try {
-        yield delay(1000);
-        const locations = yield call(fetchLocations, action.payload);
+        yield delay(1000)
+        const locations = yield call(fetchLocations, action.payload)
         yield put(setSourceLocations(locations))
     } catch (e) {
         yield put(handleError({
             type: 'Fetch source error',
-            error: e
-        }));
+            error: e,
+        }))
     }
-
 }
 
 function* fetchDestination(action) {
     try {
-        yield delay(1000);
-        const locations = yield call(fetchLocations, action.payload);
+        yield delay(1000)
+        const locations = yield call(fetchLocations, action.payload)
         yield put(setDestinationLocations(locations))
     } catch (e) {
         yield put(handleError({
             type: 'Fetch destination error',
-            error: e
-        }));
+            error: e,
+        }))
     }
 }
 
 function requestRoutes(points) {
-    return geo.requestRoutes(points);
+    return geo.requestRoutes(points)
 }
 
 function* calculateDistance(action) {
     try {
-        const source = yield select(selectors.search.firstSourceLocation);
-        const destination = yield select(selectors.search.firstDestinationLocation);
+        const source = yield select(selectors.search.firstSourceLocation)
+        const destination = yield select(selectors.search.firstDestinationLocation)
 
         if (undefined === source || undefined === destination) {
-            return;
+            return
         }
 
-        const routes = yield call(requestRoutes, [source, destination]);
-        yield put(setRoutes(routes));
-    } catch(e) {
+        const routes = yield call(requestRoutes, [source, destination])
+        yield put(setRoutes(routes))
+    } catch (e) {
         yield put(handleError({
             type: 'Calculate distance error',
-            error: e
-        }));
+            error: e,
+        }))
     }
 }
 
 function* selectMapPoint(action) {
     try {
-        const address = `${action.payload.latitude}, ${action.payload.longitude}`;
-        const sourceLocations = yield select(selectors.search.sourceLocations);
-        const destinationLocations = yield select(selectors.search.destinationLocations);
+        const address = `${action.payload.latitude}, ${action.payload.longitude}`
+        const sourceLocations = yield select(selectors.search.sourceLocations)
+        const destinationLocations = yield select(selectors.search.destinationLocations)
 
-        if (0 === sourceLocations.length) {
+        if (sourceLocations.length === 0) {
             yield put(setSource(address))
             yield put(setSourceLocations([ { location: action.payload } ]))
-        } else if (0 === destinationLocations.length) {
+        } else if (destinationLocations.length === 0) {
             yield put(setDestination(address))
             yield put(setDestinationLocations([ { location: action.payload } ]))
         } else {
@@ -112,8 +110,8 @@ function* selectMapPoint(action) {
     } catch (e) {
         yield put(handleError({
             type: 'Select map point error',
-            error: e
-        }));
+            error: e,
+        }))
     }
 }
 
@@ -125,11 +123,11 @@ export default function* searchSaga() {
             takeLatest(SELECT_MAP_POINT, selectMapPoint),
             takeLatest([SET_DESTINATION_LOCATIONS, SET_SOURCE_LOCATIONS], calculateDistance),
             takeLatest([SET_DESTINATION_LOCATIONS, SET_SOURCE_LOCATIONS], calculateDistance),
-        ]);
+        ])
     } catch (e) {
         yield put(handleError({
             type: 'Search saga error',
-            error: e
-        }));
+            error: e,
+        }))
     }
 }

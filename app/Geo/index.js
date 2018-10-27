@@ -1,17 +1,15 @@
-import GeoPlatform from './Platforms/Geo';
-
-
+import GeoPlatform from './Platforms/Geo'
 
 export default class Geo {
-	constructor() {
-		this.platform = new GeoPlatform();
-	}
+    constructor() {
+        this.platform = new GeoPlatform()
+    }
 
-	geocodeAddress(address) {
-		return this.platform.geocodeAddress(address);
-	}
+    geocodeAddress(address) {
+        return this.platform.geocodeAddress(address)
+    }
 
-	requestRoutes(points) {
-		return this.platform.requestRoutes(points);
-	}
+    requestRoutes(points) {
+        return this.platform.requestRoutes(points)
+    }
 }

@@ -1,1 +1,1 @@
-throw new Error('Android Geo module not implemented yet');
+throw new Error('Android Geo module not implemented yet')

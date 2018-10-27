@@ -1,30 +1,25 @@
-import React, { Component } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableHighlight,
-} from 'react-native';
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
+import React from 'react'
+import { Provider } from 'react-redux'
+import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
-import r from './store';
-import HomeScreen from './components/HomeScreen';
+import r from './store'
+import HomeScreen from './components/HomeScreen'
 
 const sagaMiddleware = createSagaMiddleware()
 
 const store = createStore(
-  r.reducer,
-  applyMiddleware(sagaMiddleware)
-);
+    r.reducer,
+    applyMiddleware(sagaMiddleware)
+)
 
 sagaMiddleware.run(r.saga)
 
-export default App = () =>  {
-  return (
-    <Provider store={store}>
-      <HomeScreen />
-    </Provider>
-  );
+const App = () => {
+    return (
+        <Provider store={store}>
+            <HomeScreen />
+        </Provider>
+    )
 }
+
+export default App

@@ -1,6 +1,6 @@
-import { connect } from 'react-redux';
-import ErrorView from './ErrorView';
-import store from '../../store';
+import { connect } from 'react-redux'
+import ErrorView from './ErrorView'
+import store from '../../store'
 
 export default connect(
     state => {
@@ -10,7 +10,7 @@ export default connect(
     },
     dispatch => {
         return {
-        	close: () => dispatch(store.actions.error.clearError())
+            close: () => dispatch(store.actions.error.clearError())
         }
     }
-)(ErrorView);
+)(ErrorView)
