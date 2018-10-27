@@ -94,9 +94,8 @@ function* calculateDistance(action) {
 function* selectMapPoint(action) {
     try {
         const address = `${action.payload.latitude}, ${action.payload.longitude}`;
-        const {
-          sourceLocations, destinationLocations,
-        } = yield select(selectors.search.root);
+        const sourceLocations = yield select(selectors.search.sourceLocations);
+        const destinationLocations = yield select(selectors.search.destinationLocations);
 
         if (0 === sourceLocations.length) {
             yield put(setSource(address))

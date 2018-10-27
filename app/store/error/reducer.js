@@ -20,3 +20,13 @@ export default function error(state, action) {
             return state;
     }
 }
+
+export const selectors = {
+    errorsList: state => {
+        const error = state.error;
+        if ('' === error) {
+            return [];
+        }
+        return [ error ];
+    },
+}

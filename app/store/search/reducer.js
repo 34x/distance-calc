@@ -84,3 +84,24 @@ export default function search(state, action) {
             return state;
     }
 }
+
+export const selectors = {
+    sourceLocations: state => state.sourceLocations,
+    destinationLocations: state => state.destinationLocations,
+    firstSourceLocation: state => {
+        const sources = selectors.sourceLocations(state);
+        if (sources.length > 0) {
+            return sources[0];
+        }
+
+        return undefined;
+    },
+    firstDestinationLocation: state => {
+        const destinations = selectors.destinationLocations(state);
+        if (destinations.length > 0) {
+            return destinations[0];
+        }
+
+        return undefined;
+    }
+}
