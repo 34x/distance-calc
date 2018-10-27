@@ -4,6 +4,7 @@ import {
     Text,
     View,
 } from 'react-native'
+import PropTypes from 'prop-types'
 
 const RoutesView = (props) => {
     const routes = props.items.map((el) => {
@@ -53,5 +54,9 @@ const styles = StyleSheet.create({
         textAlign: 'left',
     },
 })
+
+RoutesView.propTypes = {
+    items: PropTypes.array,
+}
 
 export default RoutesView

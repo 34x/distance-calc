@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import MapView from 'react-native-maps'
+import PropTypes from 'prop-types'
 
 export default class MapElement extends Component {
     constructor(props) {
@@ -59,4 +60,9 @@ export default class MapElement extends Component {
             </MapView>
         )
     }
+}
+
+MapElement.propTypes = {
+    sourceLocations: PropTypes.array,
+    destinationLocations: PropTypes.array,
 }

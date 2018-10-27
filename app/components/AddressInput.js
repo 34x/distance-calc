@@ -5,6 +5,7 @@ import {
     View,
     TextInput,
 } from 'react-native'
+import PropTypes from 'prop-types'
 
 const AddressInput = (props) => {
     return (
@@ -49,5 +50,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#64C65E',
     },
 })
+
+AddressInput.propTypes = {
+    label: PropTypes.string,
+    isHiglighted: PropTypes.boolean,
+    placeholder: PropTypes.string,
+    value: PropTypes.string,
+    onChange: PropTypes.function,
+}
 
 export default AddressInput

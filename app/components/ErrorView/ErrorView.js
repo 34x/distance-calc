@@ -5,6 +5,7 @@ import {
     View,
     TouchableHighlight,
 } from 'react-native'
+import PropTypes from 'prop-types'
 
 const ErrorView = (props) => {
     if (props.errors.length === 0) {
@@ -32,5 +33,10 @@ const styles = StyleSheet.create({
         padding: 4,
     },
 })
+
+ErrorView.propTypes = {
+    errors: PropTypes.array,
+    close: PropTypes.function,
+}
 
 export default ErrorView

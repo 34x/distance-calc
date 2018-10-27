@@ -8,10 +8,11 @@ import RoutesView from '../RoutesView'
 import AddressInput from '../AddressInput'
 import MapElement from '../MapElement'
 import ErrorView from '../ErrorView'
+import PropTypes from 'prop-types'
 
 const screenSize = Dimensions.get('window')
 
-export default class DistanceCalculator extends Component {
+export default class HomeScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
@@ -44,6 +45,17 @@ export default class DistanceCalculator extends Component {
             </View>
         )
     }
+}
+
+HomeScreen.propTypes = {
+    source: PropTypes.string,
+    destination: PropTypes.string,
+    routes: PropTypes.array,
+    destinationLocations: PropTypes.array,
+    sourceLocations: PropTypes.array,
+    setSource: PropTypes.function,
+    setDestination: PropTypes.function,
+    selectMapPoint: PropTypes.function,
 }
 
 const styles = StyleSheet.create({
